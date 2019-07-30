@@ -1,2 +1,10 @@
 # Hidden folders
 zochwar/
+threejs/
+
+
+.DS_Store
+.idea/DemoTools.iml
+.idea/modules.xml
+.idea/vcs.xml
+.idea/workspace.xml
