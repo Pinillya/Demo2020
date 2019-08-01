@@ -1,6 +1,8 @@
 # Hidden folders
 zochwar/
 threejs/
+dist/
+node_modules/
 
 
 .DS_Store
