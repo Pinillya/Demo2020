@@ -11,8 +11,19 @@ module.exports = {
                     options: {minimize: true}
                 }
                 ]
+            },
+            {
+                test: /\.glb$/,
+                use: [{
+                    loader: "file-loader",
+                    options: {
+                        minimize: false,
+                        name: 'assets/[hash]-[name].[ext]'
+                    }
+                }
+                ]
             }
-        ]
+        ],
     },
     plugins: [
          new HtmlWebPackPlugin({
