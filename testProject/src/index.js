@@ -48,9 +48,8 @@ function animate() {
     requestAnimationFrame( animate );
 
     renderer.render(scene, camera);
-
-    //scenes['scene1'].onSceneAnimation();
-    //timer += 0.1;
+    contentManagment.scenes['scene1'].onSceneAnimation();
+    timer += 0.1;
 }
 
 

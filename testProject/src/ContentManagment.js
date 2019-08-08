@@ -1,7 +1,7 @@
 import { Scene1 } from './js/scenes/Scene1';
 import { Scene2 } from './js/scenes/Scene2';
 
-let scenes = {};
+//let scenes = {};
 
 let selectedScene;
 let prevSelectedScene;
@@ -18,14 +18,14 @@ export class ContentManagment {
         this.getMouseEvents();
         this.onInit();
         this.sceneActive = false;
-        //this.scenes = scenes;
+        this.scenes = scenes;
     }
 
     onInit() {
     }
 
     addAllScene(scene) {
-        scenes = {
+        this.scenes = {
             scene1: new Scene1(scene),
             scene2: new Scene2(scene)
         };
@@ -35,20 +35,24 @@ export class ContentManagment {
     setupSceneButtons() {
         const parentObject = document.getElementById('list-items');
 
-        for (var item in scenes) {
-            const scene = scenes[item];
+        const that = this;
+
+        for (var item in this.scenes) {
+            const scene = this.scenes[item];
             var btn = document.createElement("BUTTON");   // Create a <button> element
             btn.className = "button list";
             btn.id = item;
             btn.innerHTML = scene.name + "<div class=\"line\"></div> </button> ";
-            btn.addEventListener("mouseup", this.sceneButtonPressed);
+            btn.addEventListener("mouseup", function () {
+                that.sceneButtonPressed(event, that);
+            });
             parentObject.appendChild(btn);
         }
     }
 
-    sceneButtonPressed(event) {
-        onSceneChange(scenes[event.srcElement.id]);
-        scenes[event.srcElement.id].onActivated();
+    sceneButtonPressed(event, that) {
+        onSceneChange(that.scenes[event.srcElement.id]);
+        that.scenes[event.srcElement.id].onActivated();
     }
 
     getMouseEvents() {
