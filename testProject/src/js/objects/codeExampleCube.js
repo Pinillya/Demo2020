@@ -2,9 +2,9 @@ import * as THREE from 'three';
 
 export class codeExampleCube {
     constructor () {
-        this.cubeGeometry = new THREE.BoxGeometry(3, 3, 3);
-        this.cubeMaterial = new THREE.MeshNormalMaterial();
-        this.mesh = new THREE.Mesh(this.cubeGeometry, this.cubeMaterial);
+        this.geometry = new THREE.BoxGeometry(3, 3, 3);
+        this.material = new THREE.MeshNormalMaterial();
+        this.mesh = new THREE.Mesh(this.geometry, this.material);
         this.mesh.name = 'codeExampleCube';
 
         this.animate = true;
