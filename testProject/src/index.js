@@ -12,7 +12,8 @@ let camera;
 let scenes = {};
 
 
-class scene1 {
+
+class Scene1 {
     // contains all the objects of that scene.
     // onDestyroy
     // onInit
@@ -22,6 +23,7 @@ class scene1 {
     constructor () {
         this.sceneObjects = [];
         this.onInit();
+        this.name = 'Scene1';
     }
 
     onInit () {
@@ -40,6 +42,84 @@ class scene1 {
             })
         }
     }
+
+    onActivated() {
+        console.log('activate');
+    }
+
+    onDestroy() {
+        console.log('destroy')
+    }
+}
+
+
+class ContentManagment {
+    constructor () {
+        this.getMouseEvents();
+        this.onInit()
+    }
+
+    onInit () {
+
+    }
+
+
+    addScene (scene) {
+        scenes = {
+            scene1: new Scene1,
+            scene2: new Scene1
+        };
+
+        this.setupSceneButtons();
+    }
+
+    setupSceneButtons () {
+        const parentObject = document.getElementById('list-items');
+
+        for(var item in scenes){
+            const scene = scenes[item];
+            var btn = document.createElement("BUTTON");   // Create a <button> element
+            btn.className = "button list";
+            btn.id = item;
+            btn.innerHTML = scene.name + "<div class=\"line\"></div> </button> ";
+            btn.addEventListener("mouseup", this.sceneButtonPressed);
+            parentObject.appendChild(btn);
+        }
+    }
+
+    sceneButtonPressed (event) {
+        onSceneChange(scenes[event.srcElement.id]);
+        scenes[event.srcElement.id].onActivated();
+    }
+
+    getMouseEvents () {
+        const that = this;
+        let buttons = document.getElementsByClassName("button");
+        Array.prototype.forEach.call(buttons, function(button) {
+            button.addEventListener("mouseup", that.mouseUp);
+        });
+    }
+
+    mouseUp (event) {
+        if (event.srcElement.id === 'scene' && contentManagment) {
+            contentManagment.sceneToggle();
+        }
+    }
+
+    sceneToggle () {
+        console.log('toggle');
+    }
+}
+let contentManagment = new ContentManagment();
+
+let selectedScene;
+let prevSelectedScene;
+function onSceneChange(scene) {
+    if (selectedScene) {
+        prevSelectedScene = selectedScene;
+        prevSelectedScene.onDestroy();
+    }
+    selectedScene = scene;
 }
 
 function init() {
@@ -68,26 +148,24 @@ function init() {
     renderer.setSize(window.innerWidth, window.innerHeight);
 
 
-    scenes = {
-        scene1: new scene1
-    };
+    contentManagment.addScene();
 
-        const loader = new GLTFLoader();
-        loader.load( cube, function ( gltf ) {
+    const loader = new GLTFLoader();
+    loader.load( cube, function ( gltf ) {
 
-            gltf.scene.traverse( function ( child ) {
+        gltf.scene.traverse( function ( child ) {
+            //console.log(child);
+            if ( child.isMesh ) {
                 //console.log(child);
-                if ( child.isMesh ) {
-                    console.log(child);
-                    //child.material.envMap = envMap;
-                } else {
-                    //console.log(child);
-                    //camera = child;
-                }
-            } );
-            //console.log(gltf.scene);
-            scene.add( gltf.scene );
+                //child.material.envMap = envMap;
+            } else {
+                //console.log(child);
+                //camera = child;
+            }
         } );
+        //console.log(gltf.scene);
+        scene.add( gltf.scene );
+    } );
 
     // add the output of the renderer to the html element
     document.body.appendChild(renderer.domElement);
@@ -104,9 +182,8 @@ function animate() {
 
     scenes['scene1'].onSceneAnimation();
     timer += 0.1;
-
-
 }
+
 
 // calls the init function when the window is done loading.
 window.onload = init;

@@ -1,9 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <style>
+        body {
+            background-color: #E5E5E5;
+            margin: 0px;
+            font-family: "Roboto", Arial, Helvetica, sans-serif;
+
+        }
+
+        .toolbar {
+            height: 33px;
+            width: 100%;
+
+            position: fixed;
+            left: 0;
+            bottom: 0;
+
+            background: #585858;
+            /*border: 1px solid #FFFFFF;*/
+            display: flex;
+            justify-content: space-between;
+        }
+
+        button {
+            background: none;
+            color: #cfcfcf;
+            border: none;
+            font-size: 1em;
+            padding-left: 2em;
+            padding-right: 2em;
+        }
+
+        button:hover {
+            color: white;
+        }
+
+        button:active {
+            color: white;
+            font-weight: bold;
+        }
+
+        .scenetable {
+            position: absolute;
+            background: #585858;
+            height: auto;
+            width: 25%;
+
+            left: 0;
+            bottom: 28px;
+        }
+
+        .list-title {
+            padding: 20px;
+            color: #fff;
+        }
+
+        .list-items {
+            width: 100%;
+            padding-bottom: 20px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .list {
+            text-align: left;
+            padding-bottom: 10px;
+        }
+
+        .line {
+            height: 1px;
+            width: 100%;
+            background-color: white;
+        }
+
+    </style>
 </head>
 <body>
+
+        <div id="scenetable" class="scenetable">
+            <div class="list-title">Scenes</div>
+            <div id="list-items" class="list-items">
+<!--                <button class="button list">Coffee <div class="line"></div> </button>
+                <button class="button list">Tea <div class="line"></div> </button>
+                <button class="button list">Milk <div class="line"></div> </button>-->
+            </div>
+        </div>
+        <div id="toolbar" class="toolbar">
+            <button class="button" id="scene"> Scenes</button>
+            <button class="button"> Timeline</button>
+            <button class="button"> Variables</button>
+        </div>
+
+
 </body>
 </html>
