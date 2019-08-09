@@ -33,7 +33,7 @@ function init() {
     renderer.setClearColor(0x000000, 1.0);
     renderer.setSize(window.innerWidth, window.innerHeight);
 
-    contentManagment = new ContentManagment(scene);
+    contentManagment = new ContentManagment(scene, scene, camera);
     contentManagment.addAllScene(scene);
 
     // add the output of the renderer to the html element
@@ -48,7 +48,7 @@ function animate() {
     requestAnimationFrame( animate );
 
     renderer.render(scene, camera);
-    contentManagment.scenes['scene1'].onSceneAnimation();
+    contentManagment.scenes['scene1'].onSceneAnimation(timer);
     timer += 0.1;
 }
 

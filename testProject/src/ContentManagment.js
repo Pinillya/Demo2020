@@ -1,27 +1,53 @@
 import { Scene1 } from './js/scenes/Scene1';
 import { Scene2 } from './js/scenes/Scene2';
+import * as THREE from 'three';
 
-//let scenes = {};
 
 let selectedScene;
 let prevSelectedScene;
 function onSceneChange(sceneItem) {
     if (selectedScene) {
         prevSelectedScene = selectedScene;
-        prevSelectedScene.onDestroy();
+        prevSelectedScene.destroy();
     }
     selectedScene = sceneItem;
 }
 
 export class ContentManagment {
-    constructor(scenes) {
+    constructor(scenes, scene, camera) {
         this.getMouseEvents();
         this.onInit();
         this.sceneActive = false;
+        this.variableActive = false;
         this.scenes = scenes;
+        this.camera = camera;
+        this.scene = scene;
+
+        this.selectedObject;
+        this.prevSelectedObject;
     }
 
     onInit() {
+        let that = this;
+        document.addEventListener( 'mousedown', function () {
+            that.onDocumentMouseDown(event, that);
+        });
+    }
+
+    onDocumentMouseDown(e, that) {
+        if (selectedScene && selectedScene.sceneObjects) {
+            let mouseVector = new THREE.Vector3();
+            mouseVector.x = 2 * (e.clientX / window.innerWidth) - 1;
+            mouseVector.y = 1 - 2 * ( e.clientY / window.innerHeight );
+
+            let raycaster = new THREE.Raycaster();
+            raycaster.setFromCamera(mouseVector, this.camera);
+            let intersects = raycaster.intersectObjects( this.scene.children );
+
+            if (intersects.length) {
+                that.onObjectChange(intersects[0].object);
+            }
+        }
     }
 
     addAllScene(scene) {
@@ -32,17 +58,16 @@ export class ContentManagment {
         this.setupSceneButtons();
     }
 
+    // scene
     setupSceneButtons() {
-        const parentObject = document.getElementById('list-items');
-
+        const parentObject = document.getElementById('list-items-scenes');
         const that = this;
-
         for (var item in this.scenes) {
             const scene = this.scenes[item];
             var btn = document.createElement("BUTTON");   // Create a <button> element
             btn.className = "button list";
             btn.id = item;
-            btn.innerHTML = scene.name + "<div class=\"line\"></div> </button> ";
+            btn.innerHTML = scene.name + "<div class=\"line\"></div> ";
             btn.addEventListener("mouseup", function () {
                 that.sceneButtonPressed(event, that);
             });
@@ -52,7 +77,44 @@ export class ContentManagment {
 
     sceneButtonPressed(event, that) {
         onSceneChange(that.scenes[event.srcElement.id]);
-        that.scenes[event.srcElement.id].onActivated();
+        that.scenes[event.srcElement.id].activate();
+    }
+
+    // variables
+    onObjectChange(objectItem) {
+        for (let i = 0; i < selectedScene.sceneObjects.length; i++) {
+            if (selectedScene.sceneObjects[i].mesh === objectItem) {
+                if (this.selectedObject) {
+                    this.prevSelectedObject = this.selectedObject;
+                }
+                this.selectedObject = selectedScene.sceneObjects[i];
+                if (this.prevSelectedObject != this.selectedObject) {
+                    this.setupVariableButtons();
+                }
+            }
+        }
+    }
+
+    setupVariableButtons() {
+        const parentObject = document.getElementById('list-items-variables');
+        const that = this;
+
+        let index = 0;
+        for (var item in this.selectedObject.variables) {
+            let valValue = this.selectedObject.variables[item];
+            var btn = document.createElement("BUTTON");   // Create a <button> element
+            btn.className = "button list";
+            btn.innerHTML = item +   '<input type=\"text\" id=\"input\">' ;
+
+            btn.oninput = function() {
+                console.log(input, index);
+                console.log(that.selectedObject.variables[item],  input[index].value);
+                that.selectedObject.variables[item] = input.value;
+            };
+            parentObject.appendChild(btn);
+
+            index++;
+        }
     }
 
     getMouseEvents() {
@@ -69,10 +131,12 @@ export class ContentManagment {
         if (event.srcElement.id === 'scene') {
             that.sceneToggle(that);
         }
+        if (event.srcElement.id === 'variables') {
+            that.variableToggle(that);
+        }
     }
 
     sceneToggle(that) {
-        console.log('moo');
         const scenetable = document.getElementById('scenetable');
         if (that.sceneActive) {
             that.sceneActive = false;
@@ -80,6 +144,17 @@ export class ContentManagment {
         } else {
             that.sceneActive = true;
             scenetable.style.display = 'block';
+        }
+    }
+
+    variableToggle(that) {
+        const variabletable = document.getElementById('variabletable');
+        if (that.variableActive) {
+            that.variableActive = false;
+            variabletable.style.display = 'none';
+        } else {
+            that.variableActive = true;
+            variabletable.style.display = 'block';
         }
     }
 }

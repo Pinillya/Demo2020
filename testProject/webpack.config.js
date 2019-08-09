@@ -22,6 +22,17 @@ module.exports = {
                     }
                 }
                 ]
+            },
+            {
+                test: /\.(png|jpe?g|gif)$/i,
+                use: [{
+                    loader: 'file-loader',
+                    options: {
+                        minimize: false,
+                        name: 'assets/[hash]-[name].[ext]'
+                    }
+                }
+                ],
             }
         ],
     },

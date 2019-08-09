@@ -52,6 +52,17 @@
             bottom: 28px;
         }
 
+        .variabletable {
+            display: none;
+            position: absolute;
+            background: #585858;
+            height: auto;
+            width: 25%;
+
+            right: 0;
+            bottom: 28px;
+        }
+
         .list-title {
             padding: 20px;
             color: #fff;
@@ -77,22 +88,31 @@
             background-color: white;
         }
 
+        input {
+            margin-left: 10px;
+        }
+
     </style>
 </head>
 <body>
 
         <div id="scenetable" class="scenetable">
             <div class="list-title">Scenes</div>
-            <div id="list-items" class="list-items">
-<!--                <button class="button list">Coffee <div class="line"></div> </button>
-                <button class="button list">Tea <div class="line"></div> </button>
-                <button class="button list">Milk <div class="line"></div> </button>-->
+            <div id="list-items-scenes" class="list-items">
             </div>
         </div>
+
+        <div id="variabletable" class="variabletable">
+            <div class="list-title">Variables</div>
+            <div id="list-items-variables" class="list-items">
+            </div>
+        </div>
+
+
         <div id="toolbar" class="toolbar">
             <button class="button" id="scene"> Scenes</button>
             <button class="button"> Timeline</button>
-            <button class="button"> Variables</button>
+            <button class="button" id="variables"> Variables</button>
         </div>
 
 
