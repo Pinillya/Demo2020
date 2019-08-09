@@ -8,7 +8,13 @@ export class codeExampleSphere {
         this.material = new THREE.MeshNormalMaterial();
         this.mesh = new THREE.Mesh(this.geometry, this.material);
         this.animate = true;
+        this.variables = {
+            scale: 1,
+            posX: 1,
+            posY: 1
+        };
     }
     onAnimate (step) {
+        //this.geometry.scale(this.variables['scale'], this.variables['scale'], this.variables['scale'])
     }
 }

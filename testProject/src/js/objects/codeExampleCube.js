@@ -8,15 +8,15 @@ export class codeExampleCube {
         this.mesh.name = 'codeExampleCube';
         this.variables = {
             scale: 1,
-            posX: 1,
-            posY: 1
+            posX: 30,
+            posY: 30
         };
 
         this.animate = true;
     }
 
     onAnimate (step) {
-        this.mesh.position.x = this.variables.posX;
-        this.mesh.position.y = this.variables.posY;
+        this.mesh.position.x = this.variables['posX'];
+        this.mesh.position.y = this.variables['posY'];
     }
 }

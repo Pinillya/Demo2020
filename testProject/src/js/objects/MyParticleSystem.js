@@ -45,8 +45,21 @@ export class MyParticleSystem {
         } );
         //
         this.mesh = new THREE.Points( this.geometry, this.material );
+        this.animate = true;
+        this.variables = {
+            rotationSpeed: 0.01,
+            posX: 1
+        };
     }
 
-    onAnimate (step) {
+    onAnimate (time) {
+        this.mesh.rotation.z = this.variables['rotationSpeed'] * time;
+
+        let geometry = this.mesh.geometry;
+        let attributes = geometry.attributes;
+        for ( let i = 0; i < attributes.size.array.length; i ++ ) {
+            attributes.size.array[ i ] = 14 + 13 * Math.sin( 0.1 * i + time );
+        }
+        attributes.size.needsUpdate = true;
     }
 }

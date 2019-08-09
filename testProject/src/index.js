@@ -48,7 +48,13 @@ function animate() {
     requestAnimationFrame( animate );
 
     renderer.render(scene, camera);
-    contentManagment.scenes['scene1'].onSceneAnimation(timer);
+
+    for (var item in contentManagment.scenes) {
+        const sceneItem = contentManagment.scenes[item];
+        sceneItem.onSceneAnimation(timer);
+    }
+
+    //contentManagment.scenes['scene1'].onSceneAnimation(timer);
     timer += 0.1;
 }
 

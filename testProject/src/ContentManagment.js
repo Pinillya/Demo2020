@@ -62,6 +62,12 @@ export class ContentManagment {
     setupSceneButtons() {
         const parentObject = document.getElementById('list-items-scenes');
         const that = this;
+
+        let oldVariables = parentObject.getElementsByClassName('button');
+        for (let i = oldVariables.length-1; i >= 0; i--) {
+            oldVariables[i].parentNode.removeChild(oldVariables[i]);
+        }
+
         for (var item in this.scenes) {
             const scene = this.scenes[item];
             var btn = document.createElement("BUTTON");   // Create a <button> element
@@ -99,17 +105,24 @@ export class ContentManagment {
         const parentObject = document.getElementById('list-items-variables');
         const that = this;
 
+        let oldVariables = parentObject.getElementsByClassName('button');
+        for (let i = oldVariables.length-1; i >= 0; i--) {
+            oldVariables[i].parentNode.removeChild(oldVariables[i]);
+        }
+
         let index = 0;
         for (var item in this.selectedObject.variables) {
             let valValue = this.selectedObject.variables[item];
+            let thisIndex = index;
+            let thisItem = item;
             var btn = document.createElement("BUTTON");   // Create a <button> element
             btn.className = "button list";
             btn.innerHTML = item +   '<input type=\"text\" id=\"input\">' ;
 
             btn.oninput = function() {
-                console.log(input, index);
-                console.log(that.selectedObject.variables[item],  input[index].value);
-                that.selectedObject.variables[item] = input.value;
+                console.log(input[thisIndex].value, thisIndex, that.selectedObject.variables[thisItem], thisItem);
+                //console.log(that.selectedObject.variables[item],  inputs[thisIndex].value);
+                that.selectedObject.variables[thisItem] = input[thisIndex].value;
             };
             parentObject.appendChild(btn);
 

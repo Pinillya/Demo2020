@@ -44,6 +44,7 @@ export class BasicScene {
             this.sceneObjects[i].material.dispose();
             this.sceneObjects[i].geometry.dispose();
         }
+        this.sceneObjects = [];
     }
     onDestroy() {}
 }
