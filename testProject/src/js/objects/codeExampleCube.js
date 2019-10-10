@@ -7,7 +7,6 @@ export class codeExampleCube {
         this.mesh = new THREE.Mesh(this.geometry, this.material);
         this.mesh.name = 'codeExampleCube';
         this.variables = {
-            scale: 1,
             posX: 30,
             posY: 30
         };

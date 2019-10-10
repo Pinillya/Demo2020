@@ -2,6 +2,9 @@
 let renderer;
 let scene;
 let camera;
+let SCREEN_WIDTH = window.innerWidth;
+let SCREEN_HEIGHT = window.innerHeight;
+let aspect = SCREEN_WIDTH / SCREEN_HEIGHT;
 
 let contentManagment;
 
@@ -43,19 +46,27 @@ function init() {
     animate();
 }
 
+const getTime = typeof performance === 'function' ? performance.now : Date.now;
+
+const FRAME_DURATION = 1000 / 60;
+let lastUpdate = 0;
 var timer = 0;
 function animate() {
     requestAnimationFrame( animate );
+    const now = getTime();
+    const delta = (now - lastUpdate) / FRAME_DURATION;
 
     renderer.render(scene, camera);
 
     for (var item in contentManagment.scenes) {
         const sceneItem = contentManagment.scenes[item];
-        sceneItem.onSceneAnimation(timer);
+        sceneItem.onSceneAnimation(delta);
     }
 
     //contentManagment.scenes['scene1'].onSceneAnimation(timer);
     timer += 0.1;
+    lastUpdate = now;
+
 }
 
 
