@@ -1,8 +1,8 @@
 // We need mesh and this.animate as the scene will use the variables.
 // onAnimate is the animation loop used if this.animate is true.
 
-import {vertexshader} from './shaderGeometryShaders'
-import {fragmentshader} from './shaderGeometryShaders'
+import {vertexshader} from '../shaders/shaderShape'
+import {fragmentshader} from '../shaders/shaderShape'
 
 
 import * as THREE from 'three';
