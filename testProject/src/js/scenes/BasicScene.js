@@ -55,10 +55,18 @@ export class BasicScene {
     onActivated() {}
 
     destroy() {
+        console.log(this.sceneObjects);
         for (let i = 0; i < this.sceneObjects.length; i++) {
             this.scene.remove(this.sceneObjects[i].mesh);
-            this.sceneObjects[i].material.dispose();
-            this.sceneObjects[i].geometry.dispose();
+
+            if (this.sceneObjects[i].material) {
+                this.sceneObjects[i].material.dispose();
+            }
+
+            if (this.sceneObjects[i].geometry) {
+                this.sceneObjects[i].geometry.dispose();
+            }
+
         }
         this.sceneObjects = [];
     }
