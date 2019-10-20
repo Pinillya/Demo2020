@@ -6,10 +6,10 @@ let SCREEN_WIDTH = window.innerWidth;
 let SCREEN_HEIGHT = window.innerHeight;
 let aspect = SCREEN_WIDTH / SCREEN_HEIGHT;
 
-let contentManagment;
+let exampleDemo;
 
 import * as THREE from 'three';
-import { ContentManagment } from './ContentManagment';
+import { ExampleDemo } from './Demos/ExampleDemo';
 
 function init() {
     //mainjs should contain
@@ -22,13 +22,7 @@ function init() {
     // create a scene, that will hold all our elements such as objects, cameras and lights.
     scene = new THREE.Scene();
 
-    // create a camera, which defines where we're looking at.
-    camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-    // position and point the camera to the center of the scene
-    camera.position.x = 105;
-    camera.position.y = 106;
-    camera.position.z = 103;
-    camera.lookAt(scene.position);
+
 
 
     // create a render, sets the background color and the size
@@ -36,8 +30,11 @@ function init() {
     renderer.setClearColor(0x000000, 1.0);
     renderer.setSize(window.innerWidth, window.innerHeight);
 
-    contentManagment = new ContentManagment(scene, scene, camera);
-    contentManagment.addAllScene(scene);
+
+
+
+    exampleDemo = new ExampleDemo(scene);
+    //contentManagment.addAllScene(scene);
 
     // add the output of the renderer to the html element
     document.body.appendChild(renderer.domElement);
@@ -56,12 +53,12 @@ function animate() {
     const now = getTime();
     const delta = (now - lastUpdate) / FRAME_DURATION;
 
-    renderer.render(scene, camera);
-
-    for (var item in contentManagment.scenes) {
-        const sceneItem = contentManagment.scenes[item];
+    for (var item in exampleDemo.scenes) {
+        const sceneItem = exampleDemo.scenes[item];
         sceneItem.onSceneAnimation(delta);
     }
+
+    renderer.render(scene, exampleDemo.getCamera());
 
     //contentManagment.scenes['scene1'].onSceneAnimation(timer);
     timer += 0.1;

@@ -1,9 +1,24 @@
+import * as THREE from 'three';
+
 export class BasicScene {
     constructor (scene, camera = {}) {
         this.sceneObjects = [];
         this.scene = scene;
         this.camera = camera;
         this.name = this.constructor.name;
+
+        this.setupBasicCamera();
+    }
+
+    setupBasicCamera () {
+        //if (this.camera.length == 0) {
+            this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+            // position and point the camera to the center of the scene
+            this.camera.position.x = 105;
+            this.camera.position.y = 106;
+            this.camera.position.z = 103;
+            this.camera.lookAt(this.scene.position);
+        //}
     }
 
     addObject (obj) {
