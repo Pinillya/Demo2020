@@ -1,5 +1,6 @@
 import { Scene1 } from './js/scenes/Scene1';
 import { Scene2 } from './js/scenes/Scene2';
+import { SceneEspen } from './js/scenes/SceneEspen';
 import { InsideObjShaderScene } from './js/scenes/InsideObjShaderScene';
 
 
@@ -57,6 +58,7 @@ export class ContentManagment {
         this.scenes = {
             scene1: new Scene1(scene),
             scene2: new Scene2(scene),
+            sceneEspen: new SceneEspen(scene, this.camera),
             shaderScene: new InsideObjShaderScene(scene)
         };
         this.setupSceneButtons();
@@ -85,8 +87,8 @@ export class ContentManagment {
         }
 
         //onSceneChange(that.scenes['shaderScene']);
-        onSceneChange(that.scenes['shaderScene']);
-        that.scenes['shaderScene'].activate();
+        onSceneChange(that.scenes['sceneEspen']);
+        that.scenes['sceneEspen'].activate();
     }
 
     sceneButtonPressed(event, that) {

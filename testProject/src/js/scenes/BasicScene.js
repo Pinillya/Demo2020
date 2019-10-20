@@ -1,7 +1,8 @@
 export class BasicScene {
-    constructor (scene) {
+    constructor (scene, camera = {}) {
         this.sceneObjects = [];
         this.scene = scene;
+        this.camera = camera;
         this.name = this.constructor.name;
     }
 
