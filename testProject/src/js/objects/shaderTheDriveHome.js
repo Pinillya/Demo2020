@@ -8,23 +8,25 @@ import {fragmentshader} from '../shaders/driveHome'
 import * as THREE from 'three';
 export class shaderTheDriveHome {
     constructor () {
+        const objectSizeX = 60;
+        const objectSizeY = 30;
+        const objectSizeZ = 30;
 
         //this.geometry = new THREE.TorusGeometry( 10, 3, 16, 100 );
-        //this.geometry = new THREE.SphereGeometry( 30, 70, 70 );
-        //this.geometry = new THREE.BoxGeometry( 30, 30, 30 );
-        this.geometry = new THREE.PlaneGeometry( 45, 30 );
+        //this.geometry = new THREE.SphereGeometry( objectSizeX, objectSizeY, 30 );
+        //this.geometry = new THREE.BoxGeometry( objectSizeX, objectSizeY, objectSizeZ );
+        this.geometry = new THREE.PlaneGeometry( objectSizeX, objectSizeY );
 
-        let height = window.innerHeight;
-        let width = window.innerWidth;
+        const height = window.innerHeight;
+        const width = window.innerWidth;
 
 
-        console.log(window.innerWidth / window.innerHeight);
 
 
         let uniforms = {
             uTime: { type: 'float', value: 0.1 },
             uResolution: { value: new THREE.Vector2(width, height, 1, 1 ) },
-            uObjectSize: { value: new THREE.Vector2(45, 30, 1, 1 ) }
+            uObjectSize: { value: new THREE.Vector2(objectSizeX, objectSizeY, 1, 1 ) }
         };
 
         this.material =  new THREE.ShaderMaterial({
