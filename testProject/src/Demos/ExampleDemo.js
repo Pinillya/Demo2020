@@ -17,7 +17,7 @@ export class ExampleDemo {
     }
 
     onInit () {
-        this.contentManagment.setActiveScene(this.scenes['scene1']);
+        this.contentManagment.setActiveScene(this.scenes['shaderScene']);
     }
 
     addAllScene(scene) {

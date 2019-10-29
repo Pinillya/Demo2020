@@ -13,7 +13,7 @@ export class Scene2 extends BasicScene {
         this.addObject(partSystem);
     }
 
-    setupBasicCamera () {
+/*    setupBasicCamera () {
         //if (this.camera.length == 0) {
         //this.camera = new THREE.OrthographicCamera(window.innerWidth / - 2 ) //,  / window.innerHeight, 0.1, 1000);
         const width = window.innerWidth;
@@ -26,5 +26,5 @@ export class Scene2 extends BasicScene {
         this.camera.position.z = 103;
         //this.camera.lookAt(this.scene.position);
         //}
-    }
+    }*/
 }

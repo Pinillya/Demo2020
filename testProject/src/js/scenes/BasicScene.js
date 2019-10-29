@@ -14,8 +14,8 @@ export class BasicScene {
         //if (this.camera.length == 0) {
             this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
             // position and point the camera to the center of the scene
-            this.camera.position.x = 105;
-            this.camera.position.y = 106;
+            //this.camera.position.x = 105;
+            //this.camera.position.y = 106;
             this.camera.position.z = 103;
             this.camera.lookAt(this.scene.position);
         //}
@@ -49,11 +49,15 @@ export class BasicScene {
         }
     }
 
+    // private
     activate() {
         this.onActivated();
     }
+
+    // Override this for options on scene activation.
     onActivated() {}
 
+    // private
     destroy() {
         console.log(this.sceneObjects);
         for (let i = 0; i < this.sceneObjects.length; i++) {
@@ -69,6 +73,9 @@ export class BasicScene {
 
         }
         this.sceneObjects = [];
+        this.onDestroy();
     }
+
+    // Override this for options on scene destruction.
     onDestroy() {}
 }

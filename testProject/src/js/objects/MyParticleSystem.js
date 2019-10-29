@@ -53,12 +53,12 @@ export class MyParticleSystem {
     }
 
     onAnimate (time) {
-        this.mesh.rotation.z = this.variables['rotationSpeed'] * time;
+        this.mesh.rotation.z += this.variables['rotationSpeed'] * time;
 
         let geometry = this.mesh.geometry;
         let attributes = geometry.attributes;
         for ( let i = 0; i < attributes.size.array.length; i ++ ) {
-            attributes.size.array[ i ] = 14 + 13 * Math.sin( 0.1 * i + time );
+            attributes.size.array[ i ] = Math.random() * (Math.sin(time) * 20) ;
         }
         attributes.size.needsUpdate = true;
     }

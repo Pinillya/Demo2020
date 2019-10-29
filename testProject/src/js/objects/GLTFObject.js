@@ -15,11 +15,22 @@ export class GLTFObject {
         
         loader.load( 'mocapDancing.glb', function ( gltf ) {
             console.log("About to traverse scene");
+
+
             gltf.scene.traverse( function ( child ) {
 
                 if(child.name == "Camera") {
                     console.log("Woot, found a camera!");
-                    that.camera = child;
+                    that.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+                    that.camera.position.x = child.position.x;
+                    that.camera.position.y = child.position.y;
+                    that.camera.position.z = child.position.z;
+                    that.camera.quaternion.w = child.quaternion.w;
+                    that.camera.quaternion.x = child.quaternion.x;
+                    that.camera.quaternion.y = child.quaternion.y;
+                    that.camera.quaternion.z = child.quaternion.z;
+
+                    that.camera.up.y = child.up.y;
                 } else if(child.isMesh) {
                     console.log("Found a mesh!")
                 }
