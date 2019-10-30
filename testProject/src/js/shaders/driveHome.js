@@ -54,11 +54,12 @@ export let fragmentshader = `
     }
     
     float Noise (float time) {
-        return fract(sin(time*40958.0)*+349857.0);
+        return fract(sin(time*8058.0)*+9498.0);
     }
     
-    vec4 Vec3Noise (float time) {        
-        return vec4(Noise(time), Noise(time), Noise(time), Noise(time));
+    vec4 Vec4Noise (float time) {
+        return fract(sin(time*vec4(8445.0, 9736.0, 8743.0, 9149.0)) * vec4(3497.0, 9346.0, 7389.0, 9374.0));   
+        //return vec4(Noise(time), Noise(time), Noise(time), Noise(time));
     }
     
     vec3 ClosestPoint (ray r, vec3 point) {
@@ -106,15 +107,19 @@ export let fragmentshader = `
         r.direction.x = abs(r.direction.x);
         
         float arrayOfCircles = 0.0;
-        vec3 color = vec3(1.0, 0.7, 0.3);
-        for (float i = 0.0; i < 10.0; i += 1.0) {
+        vec3 color = vec3(0.0, 0.0, 0.0);
+        for (float i = 0.0; i < 20.0; i += 1.0) {
             float timeDistorted = fract((time + i * 0.1 + lightIntervalStep * 0.1 * 0.5  ));
+            float fade = timeDistorted * timeDistorted * timeDistorted * timeDistorted * timeDistorted * timeDistorted;
+            vec4 noise4 = Vec4Noise(i+lightIntervalStep*100.0);
+            float xpos = mix(2.5, 10.0, noise4.x);
+            float ypos = mix(0.1 , 2.0, noise4.y);
             
-            vec3 point = vec3(2.5, 2.0, 100.0 - timeDistorted * 100.0);
-            arrayOfCircles += Bokeh(r, point, 0.05, 0.1) * timeDistorted * timeDistorted * timeDistorted;
+            vec3 point = vec3(xpos, ypos, 50.0 - timeDistorted * 50.0);
+            color += vec3(noise4.w, noise4.y, noise4.z) * Bokeh(r, point, 0.05, 0.1) * fade;
         }
         
-        color *= vec3(arrayOfCircles);
+        //color *= vec3(arrayOfCircles);
         
         return color;
     }
@@ -244,10 +249,9 @@ export let fragmentshader = `
         vec3 headLights = HeadLights(cameraRay, time);
         vec3 tailLights = TailLights(cameraRay, time);
 
+        color += streetLights + headLights + tailLights + environmentLights;
+        color += (cameraRay.direction.y + 0.25) * vec3(0.1, 0.1, 0.5);
 
-        color += streetLights + headLights + tailLights;
-        //color *= col;
-        
         gl_FragColor = vec4(color, 1.0);
     }  
 `;
