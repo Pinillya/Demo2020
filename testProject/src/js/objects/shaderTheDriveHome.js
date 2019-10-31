@@ -1,28 +1,18 @@
 // We need mesh and this.animate as the scene will use the variables.
 // onAnimate is the animation loop used if this.animate is true.
 
-//import {vertexshader} from '../shaders/driveHome'
-//import {fragmentshader} from '../shaders/driveHome'
+import {vertexshader} from '../shaders/driveHome'
+import {fragmentshader} from '../shaders/driveHome'
 import * as THREE from 'three';
-
-import {Raindrops} from '../shaders/raindrops'
-
-
 
 export class shaderTheDriveHome {
     constructor () {
-        const raindrops = new Raindrops();
 
         const objectSizeX = 40;
         const objectSizeY = 40;
         const objectSizeZ = 40;
 
         const box = false;
-
-
-
-        //this.geometry = new THREE.TorusGeometry( 10, 3, 16, 100 );
-        //this.geometry = new THREE.SphereGeometry( objectSizeX, objectSizeY, 300 );
 
         if (box) {
             this.geometry = new THREE.BoxGeometry( objectSizeX, objectSizeY, objectSizeZ );
@@ -39,12 +29,10 @@ export class shaderTheDriveHome {
             uObjectSize: { value: new THREE.Vector2(objectSizeX, objectSizeY, 1, 1 ) }
         };
 
-
-
         this.material =  new THREE.ShaderMaterial({
             uniforms: uniforms,
-            vertexShader: raindrops.getVertexshader(),
-            fragmentShader: raindrops.getFragmentshader()
+            vertexShader: vertexshader,
+            fragmentShader: fragmentshader
         });
 
         this.material.side = THREE.DoubleSide;
@@ -62,18 +50,9 @@ export class shaderTheDriveHome {
             this.mesh.rotation.x += -0.5;
         }
 
-
-        //this.mesh.position.z = -100;
-        //this.mesh.position.x = -20;
     }
     onAnimate (delta) {
         this.time += 0.01;
-
-        //this.mesh.rotation.y += delta/300.;
-        //this.mesh.rotation.x += delta/300.;
-
-        //this.mesh.position.y *= 0.5 + Math.sin(delta) * 10 ;
-        //console.log(this.time);
 
         this.mesh.material.uniforms.uTime.value = this.time;
         this.mesh.material.uniforms.uTime.needsUpdate = true

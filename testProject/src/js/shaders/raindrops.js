@@ -2,20 +2,11 @@ let vertexshader = `
     uniform vec2 uResolution;
     uniform vec2 uObjectSize;
     uniform float uTime;
+    uniform float uMouse;
     varying vec2 vUv;
-    varying vec3 col;
-    varying vec3 transformedNormal;
     
     void main() {
       vUv = uv;
-      vec3 warpUV = position;
-      float warpFactor = 0.05;
-      col = position;
-      col = normal;
-      transformedNormal = normalMatrix * normal;
-
-      col = vec3(uv.x, uv.y, 1.0);
-     
       gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);
 
     }
@@ -25,9 +16,9 @@ let fragmentshader = `
     uniform vec2 uResolution;
     uniform vec2 uObjectSize;
     uniform float uTime;
-
+    uniform float uMouse;
+    
     varying vec2 vUv;
-    varying vec3 col;
     varying vec3 transformedNormal;
     
     #define Sm(a,b,t) smoothstep(a,b,t);
@@ -35,7 +26,6 @@ let fragmentshader = `
     struct ray {
         vec3 origin, direction;
     };
-   
     
     ray GetRay (vec3 cameraPosition, vec3 lookout, vec2 uvInUse, float zoom) {
         ray a;
@@ -50,58 +40,6 @@ let fragmentshader = `
         //Ray dir with camera
         a.direction = normalize(intersection - a.origin);
         return a;
-    
-    }
-    
-    float Noise (float time) {
-        return fract(sin(time*8058.0)*+9498.0);
-    }
-    
-    vec4 Vec4Noise (float time) {
-        return fract(sin(time*vec4(8445.0, 9736.0, 8743.0, 9149.0)) * vec4(3497.0, 9346.0, 7389.0, 9374.0));   
-        //return vec4(Noise(time), Noise(time), Noise(time), Noise(time));
-    }
-    
-    vec3 ClosestPoint (ray r, vec3 point) {
-        return r.origin + max(0.0, dot(point-r.origin, r.direction))* r.direction ;
-    }
-    
-    
-    float DistanceRay(ray r, vec3 point){
-        //return length(cross(point-r.origin, r.direction))/length(r.direction);
-        return length(point-ClosestPoint(r, point));
-    }
-    
-    float Bokeh (ray r, vec3 point, float size, float blur) {
-        float distance = DistanceRay(r, point);
-        
-        size *= length(point);
-       
-        float circle = Sm(size, size*(1.0-blur), distance);
-        circle *= mix( 0.6, 1.0, smoothstep(size*0.8, size, distance));
-        return circle;
-    }
-    
-
-    vec3 EnvironmentLights (ray r, float time) {
-        //mirror the screen
-        float lightIntervalStep = step(r.direction.x, 0.0);
-        r.direction.x = abs(r.direction.x);
-        
-        float arrayOfCircles = 0.0;
-        vec3 color = vec3(0.0, 0.0, 0.0);
-        for (float i = 0.0; i < 20.0; i += 1.0) {
-            float timeDistorted = fract((time + i * 0.1 + lightIntervalStep * 0.1 * 0.5  ));
-            float fade = timeDistorted  * timeDistorted * timeDistorted * timeDistorted * timeDistorted;
-            vec4 noise4 = Vec4Noise(i+lightIntervalStep*100.0);
-            float xpos = mix(2.5, 10.0, noise4.x);
-            float ypos = mix(0.1 , 2.0, noise4.y);
-            
-            vec3 point = vec3(xpos, ypos, 50.0 - timeDistorted * 50.0);
-            color += vec3(noise4.w, noise4.y, noise4.z) * Bokeh(r, point, 0.05, 0.1) * fade;
-        }
-                
-        return color;
     }
     
     vec2 RainDistortion (vec2 uvInUse, float time) {
@@ -155,7 +93,7 @@ let fragmentshader = `
         
         //return sin(uvInUse.y * 40.0) * 0.01;
 
-        return vec2(mask1*(offset1*30.0) + mask2*(offset2*20.0));
+        return vec2(mask1*(offset1*90.0) + mask2*(offset2*120.0));
     }
     
     void main() {
@@ -163,7 +101,14 @@ let fragmentshader = `
         vec2 flatUV = gl_FragCoord.xy / uResolution.xy;
         flatUV -= 0.5;
         flatUV.x *= uResolution.x / uResolution.y;
-        float time = uTime*0.05;
+        
+        float time = 0.0;
+        if (uMouse != 0.0) {
+            time = uMouse * 0.001;
+        } else {
+            time = uTime*0.05;
+        }
+        
         vec3 color = vec3(0.0);
         
         // 3d uv
@@ -187,8 +132,6 @@ let fragmentshader = `
         
         ray cameraRay = GetRay(cameraPosition, lookat, uvInUse-rain, zoom);
 
-        vec3 streetLights = EnvironmentLights(cameraRay, time);
-        //color += streetLights;
         color += vec3(0.2, 0.2, 0.2);
         color += (cameraRay.direction.y + 0.25) * vec3(0.1, 0.1, 0.5);
         
