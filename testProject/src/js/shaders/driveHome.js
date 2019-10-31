@@ -222,11 +222,51 @@ export let fragmentshader = `
         return color;
     }
     
+    
+    vec2 RainDistortion (vec2 uvInUse, float time) {
+        
+        vec2 aspectRatio = vec2(3.0, 1.0);
+        float screenDivisionCount = 3.0;
+        time *= 40.0;
+        
+        uvInUse *= screenDivisionCount;
+        vec2 rainUV = uvInUse;
+        rainUV.y += time * 0.22;
+        rainUV = fract(rainUV*aspectRatio)-0.5;
+        
+        
+                
+        float posY = -sin(time+sin(time+sin(time))*0.5)*0.43;   
+        vec2 point1 = vec2(0.0, posY);
+        float distance = length((rainUV-point1)/aspectRatio);
+        
+        float mask1 = Sm(0.07, 0.00, distance);
+        
+        
+        //Mask2
+        vec2 mask2AspectRatio = vec2(1.0, 2.0);
+        distance = length((fract(uvInUse*aspectRatio.x*mask2AspectRatio)-0.5)/mask2AspectRatio);
+        float mask2Cutoff = Sm(-0.1, 0.1, rainUV.y-point1.y);
+        //distance *= Sm(0.00001, 1.0, rainUV.y-point1.y);
+        
+        float mask2Point = Sm(0.3*(0.5-rainUV.y), 0.0, distance);
+        float mask2 = mask2Point * mask2Cutoff;
+       
+        //debugging
+        //if (rainUV.x >  0.46 || rainUV.y >  0.49) {mask1 = 1.0;} 
+        
+        //return sin(uvInUse.y * 40.0) * 0.01;
+
+        return vec2(mask1 + mask2);
+    }
+    
     void main() {
         // 2d uv
         vec2 flatUV = gl_FragCoord.xy / uResolution.xy;
         flatUV -= 0.5;
         flatUV.x *= uResolution.x / uResolution.y;
+        float time = uTime*0.05;
+        vec3 color = vec3(0.0);
         
         // 3d uv
         vec2 centeredvUv = vUv;
@@ -240,17 +280,25 @@ export let fragmentshader = `
         vec3 cameraPosition = vec3(0.5, 0.2, 0.0);
         float zoom = 2.0;
         vec3 lookat = vec3(0.5, 0.2, 1.0);
+        
+        vec2 rain = RainDistortion(uvInUse, time);
+        
         ray cameraRay = GetRay(cameraPosition, lookat, uvInUse, zoom);
         
-        vec3 color = vec3(0.0);
-        float time = uTime*0.1;
+        
+        
+        
+        
         vec3 streetLights = StreetLights(cameraRay, time);
         vec3 environmentLights = EnvironmentLights(cameraRay, time);
         vec3 headLights = HeadLights(cameraRay, time);
         vec3 tailLights = TailLights(cameraRay, time);
 
-        color += streetLights + headLights + tailLights + environmentLights;
-        color += (cameraRay.direction.y + 0.25) * vec3(0.1, 0.1, 0.5);
+        //color += streetLights + headLights + tailLights + environmentLights;
+        //color += (cameraRay.direction.y + 0.25) * vec3(0.1, 0.1, 0.5);
+        
+        
+        color += vec3(rain.x, rain.y, 0.0);
 
         gl_FragColor = vec4(color, 1.0);
     }  

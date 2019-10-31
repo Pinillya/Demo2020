@@ -12,10 +12,18 @@ export class shaderTheDriveHome {
         const objectSizeY = 30;
         const objectSizeZ = 30;
 
+        const box = false;
+
         //this.geometry = new THREE.TorusGeometry( 10, 3, 16, 100 );
         //this.geometry = new THREE.SphereGeometry( objectSizeX, objectSizeY, 30 );
-        //this.geometry = new THREE.BoxGeometry( objectSizeX, objectSizeY, objectSizeZ );
-        this.geometry = new THREE.PlaneGeometry( objectSizeX, objectSizeY );
+
+        if (box) {
+            this.geometry = new THREE.BoxGeometry( objectSizeX, objectSizeY, objectSizeZ );
+        } else {
+            this.geometry = new THREE.PlaneGeometry( objectSizeX, objectSizeY );
+        }
+
+        //
 
         const height = window.innerHeight;
         const width = window.innerWidth;
@@ -44,6 +52,11 @@ export class shaderTheDriveHome {
         };
 
         this.time = 0;
+
+        if (box) {
+            this.mesh.rotation.y += 10.0;
+            this.mesh.rotation.x += 10.0;
+        }
 
 
         //this.mesh.position.z = -100;
