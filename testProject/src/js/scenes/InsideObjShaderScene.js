@@ -8,6 +8,7 @@ export class InsideObjShaderScene extends BasicScene {
 /*        let basicSphere = new shadedGeometry;
         this.addObject(basicSphere);*/
 
+        //this.camera.position.z = 500;
         let driveHome = new shaderTheDriveHome;
         this.addObject(driveHome);
     }

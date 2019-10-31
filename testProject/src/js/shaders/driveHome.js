@@ -300,6 +300,7 @@ export let fragmentshader = `
         
         vec2 rain = RainDistortion(uvInUse*5.0, time)*0.2;
         rain = RainDistortion(uvInUse*7.0, time)*0.2;
+        
         uvInUse.x += sin(uvInUse.y*73.1)*0.002;
         uvInUse.y += sin(uvInUse.x*23.1)*0.005;
         

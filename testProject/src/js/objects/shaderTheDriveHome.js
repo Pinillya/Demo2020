@@ -8,14 +8,14 @@ import {fragmentshader} from '../shaders/driveHome'
 import * as THREE from 'three';
 export class shaderTheDriveHome {
     constructor () {
-        const objectSizeX = 60;
-        const objectSizeY = 30;
-        const objectSizeZ = 30;
+        const objectSizeX = 20;
+        const objectSizeY = 20;
+        const objectSizeZ = 20;
 
         const box = true;
 
         //this.geometry = new THREE.TorusGeometry( 10, 3, 16, 100 );
-        //this.geometry = new THREE.SphereGeometry( objectSizeX, objectSizeY, 30 );
+        //this.geometry = new THREE.SphereGeometry( objectSizeX, objectSizeY, 300 );
 
         if (box) {
             this.geometry = new THREE.BoxGeometry( objectSizeX, objectSizeY, objectSizeZ );
@@ -23,13 +23,8 @@ export class shaderTheDriveHome {
             this.geometry = new THREE.PlaneGeometry( objectSizeX, objectSizeY );
         }
 
-        //
-
         const height = window.innerHeight;
         const width = window.innerWidth;
-
-
-
 
         let uniforms = {
             uTime: { type: 'float', value: 0.1 },
@@ -64,8 +59,9 @@ export class shaderTheDriveHome {
     }
     onAnimate (delta) {
         this.time += 0.01;
-        this.mesh.rotation.y += delta/300.;
-        this.mesh.rotation.x += delta/300.;
+
+        //this.mesh.rotation.y += delta/300.;
+        //this.mesh.rotation.x += delta/300.;
 
         //this.mesh.position.y *= 0.5 + Math.sin(delta) * 10 ;
         //console.log(this.time);
