@@ -55,14 +55,17 @@ let fragmentshader = `
         vec2 cellID = floor(rainUV);
         
         rainUV.y += time * 0.22;
-        float cellNoise = fract(sin(cellID.x*706.4)*760.32);
+        float cellNoise = fract(sin(cellID.x*706.4)*96.32);
+        //cellNoise += fract(sin(cellID.x*7065.4)*7602.32);
         rainUV.y += cellNoise;
+        
         uvInUse.y += cellNoise;
                 
         cellID = floor(rainUV);
         rainUV = fract(rainUV)-0.5;
         
-        time += fract(sin(cellID.x*76.4+cellID.y*557.0)*760.32) * 6.283; 
+        time += fract(sin(cellID.x * 76.4 + cellID.y * 557.0)*760.32) * 6.283; 
+        
         
         
         
@@ -93,47 +96,94 @@ let fragmentshader = `
         
         //return sin(uvInUse.y * 40.0) * 0.01;
 
-        return vec2(mask1*(offset1*90.0) + mask2*(offset2*120.0));
+        return vec2(mask1*(offset1*30.0) + mask2*(offset2*20.0));
     }
     
-    void main() {
-        // 2d uv
+    float Bias(float time, float bias) {
+      float biasValue = time / ((((1.0/bias) - 2.0)*(1.0 - time))+1.0);
+      return biasValue;
+    }
+    
+    float Gain (float time, float gain) {
+      float gainReturn = 0.0;
+      if (time < 0.5) {
+        //gainReturn = Bias(time, gain);
+        gainReturn = Bias(time * 2.0, gain)/2.0;
+      } else {
+        gainReturn = Bias((time * 2.0 - 1.0), (1.0 - gain)) / 2.0 + 0.5;
+      }
+      return gainReturn;
+    }
+    
+    // blur must be between 0 and 1
+    vec3 mix3 (vec3 v1, vec3 v2, vec3 v3, float mixVal, float midPoint, float topBlur, float botBlur) {
+        topBlur = clamp(topBlur, 0.0, 1.0);
+        botBlur = clamp(botBlur, 0.0, 1.0);
+        
+        mixVal = mod(mixVal, 1.0);
+        mixVal = Bias(mixVal, midPoint);
+        
+        vec3 mixResult = vec3(0.0);
+        if (mixVal < 0.5) {
+            float normalizedValue = mixVal*2.0;
+            normalizedValue = Gain(normalizedValue, botBlur);
+            mixResult = mix(v1, v2, normalizedValue);
+        } else {
+            float normalizedValue = (mixVal-0.5)*2.0;
+            normalizedValue = Gain(normalizedValue, topBlur);
+            mixResult = mix(v2, v3, normalizedValue);
+        }
+        
+        return mixResult;
+    }
+    
+    void main() {    
+        //****  2d uv **** 
         vec2 flatUV = gl_FragCoord.xy / uResolution.xy;
         flatUV -= 0.5;
         flatUV.x *= uResolution.x / uResolution.y;
         
-        float time = 0.0;
-        if (uMouse != 0.0) {
-            time = uMouse * 0.001;
-        } else {
-            time = uTime*0.05;
-        }
-        
-        vec3 color = vec3(0.0);
-        
-        // 3d uv
+        // **** 3d uv **** 
         vec2 centeredvUv = vUv;
         centeredvUv += -0.5;
         centeredvUv.x *= uObjectSize.x / uObjectSize.y;
         
         // set UV to use
         vec2 uvInUse = centeredvUv;
+        
+        // **** Mouse timeline scrubbing **** 
+        float time = 0.0;
+        if (uMouse != 0.0) {
+            time = uMouse * 0.001;
+        } else {
+            time = uTime*0.05;
+        }
        
-       //Camera
+       // **** Camera **** 
         vec3 cameraPosition = vec3(0.5, 0.2, 0.0);
         float zoom = 2.0;
         vec3 lookat = vec3(0.5, 0.2, 1.0);
         
-        vec2 rain = RainDistortion(uvInUse*13.0, time)*0.5;
-        rain = RainDistortion(uvInUse*10.0, time)*1.2;
+        
+        // This is the shader after all standard stuff has been added:
+        // **** **** ---- ****
+        vec3 color = vec3(0.0);
+        vec3 colorTop = vec3(0.512,0.731,0.912);
+        vec3 colorMid = vec3(1.000,0.510,0.529);
+        vec3 colorBot = vec3(0.912,0.790,0.524);
+        
+        vec2 rain = RainDistortion(uvInUse*10.0, time)*0.5;
+        rain = RainDistortion(uvInUse*7.0, time)*1.2;
         
         uvInUse.x += sin(uvInUse.y*73.1)*0.002;
         uvInUse.y += sin(uvInUse.x*23.1)*0.005;
         
         ray cameraRay = GetRay(cameraPosition, lookat, uvInUse-rain, zoom);
 
-        color += vec3(0.2, 0.2, 0.2);
-        color += (cameraRay.direction.y + 0.25) * vec3(0.1, 0.1, 0.5);
+        vec3 colorTint = mix3(colorBot, colorMid, colorTop, vUv.y, 0.5, 0.6 *sin(vUv.x*3.0) , 0.2 * sin(vUv.x*3.0));
+        colorTint *= vec3(0.6);
+        color += colorTint;
+        color += (cameraRay.direction.y );
         
         gl_FragColor = vec4(color, 1.0);
     }  
