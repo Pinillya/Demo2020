@@ -12,7 +12,7 @@ export class shaderTheDriveHome {
         const objectSizeY = 30;
         const objectSizeZ = 30;
 
-        const box = false;
+        const box = true;
 
         //this.geometry = new THREE.TorusGeometry( 10, 3, 16, 100 );
         //this.geometry = new THREE.SphereGeometry( objectSizeX, objectSizeY, 30 );
@@ -54,8 +54,8 @@ export class shaderTheDriveHome {
         this.time = 0;
 
         if (box) {
-            this.mesh.rotation.y += 10.0;
-            this.mesh.rotation.x += 10.0;
+            this.mesh.rotation.y += 12.0;
+            this.mesh.rotation.x += -0.5;
         }
 
 
@@ -64,8 +64,8 @@ export class shaderTheDriveHome {
     }
     onAnimate (delta) {
         this.time += 0.01;
-        //this.mesh.rotation.z += delta/100.;
-        //this.mesh.rotation.y += delta/100.;
+        this.mesh.rotation.y += delta/300.;
+        this.mesh.rotation.x += delta/300.;
 
         //this.mesh.position.y *= 0.5 + Math.sin(delta) * 10 ;
         //console.log(this.time);
