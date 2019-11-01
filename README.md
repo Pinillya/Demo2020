@@ -1,8 +1,14 @@
 # DemoTools
 [Setup](#Setup)
 [Making a new demo](#Making-a-new-demo)
+
 [Making a new scene](#Making-a-new-scene)
+
 [Making a new object](#Making-a-new-object)
+
+[Current webpack file-loader support](#Current-webpack-file-loader-support)
+
+
 
 
 ---
@@ -64,3 +70,9 @@ In this example, we add a basic sphere to the scene.
 
 ---
 ## Making a new object
+
+
+---
+## Current webpack file-loader support:
+
+
