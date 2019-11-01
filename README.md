@@ -1,4 +1,10 @@
 # DemoTools
+[Setup](#Setup)
+[Making a new demo](#Making-a-new-demo)
+[Making a new scene](#Making-a-new-scene)
+[Making a new object](#Making-a-new-object)
+
+
 ---
 
 ## Setup:
