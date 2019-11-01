@@ -32,12 +32,13 @@ export class GLTFObject {
 
                     that.camera.up.y = child.up.y;
                 } else if(child.isMesh) {
+                    that.mesh = child;
                     console.log("Found a mesh!")
                 }
                 
             } );
             console.log("finished traversing scene");
-            that.mesh = gltf.scene;
+            //that.mesh = gltf.scene;
 
         } );
 

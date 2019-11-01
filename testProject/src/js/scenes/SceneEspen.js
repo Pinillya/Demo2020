@@ -14,7 +14,7 @@ export class SceneEspen extends BasicScene {
         	this.addObject(sceneObject);
             if (sceneObject.camera){
                 this.camera = sceneObject.camera;
-                console.log(this.camera);
+                //console.log(this.camera);
 
                 //this.camera.position.y = 12;
             }

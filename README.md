@@ -71,8 +71,22 @@ In this example, we add a basic sphere to the scene.
 ---
 ## Making a new object
 
+The object you create needs to contain this.mesh with a mesh that can be added to the scene.
+If you want to change the camera, create a camera in your obj, then assign the camera in the scene using the object.
+If you want access to a variables of an object while running the scene in your browser, add that variable to this.variables{}.
+If you want the object to animate, sett this.animate = true; and add onAnimate (step) {}
+
+OBS: The best practice for adding an object and for adding a GLTF scene has not been established yet as we're still experimenting with it.
 
 ---
 ## Current webpack file-loader support:
+
+Meaning, that if you want to add more you need to find the relevant file loader and add it to the webpack.config.js
+
+html,
+glb,
+png,
+jpe,
+gif
 
 
