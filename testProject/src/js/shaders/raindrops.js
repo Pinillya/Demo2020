@@ -17,6 +17,7 @@ let fragmentshader = `
     uniform vec2 uObjectSize;
     uniform float uTime;
     uniform float uMouse;
+    uniform sampler2D texture1;
     
     varying vec2 vUv;
     varying vec3 transformedNormal;
@@ -96,7 +97,7 @@ let fragmentshader = `
         
         //return sin(uvInUse.y * 40.0) * 0.01;
 
-        return vec2(mask1*(offset1*30.0) + mask2*(offset2*20.0));
+        return vec2(mask1*(offset1*10.0) + mask2*(offset2*20.0));
     }
     
     float Bias(float time, float bias) {
@@ -172,8 +173,8 @@ let fragmentshader = `
         vec3 colorMid = vec3(1.000,0.510,0.529);
         vec3 colorBot = vec3(0.912,0.790,0.524);
         
-        vec2 rain = RainDistortion(uvInUse*10.0, time)*0.5;
-        rain = RainDistortion(uvInUse*7.0, time)*1.2;
+        vec2 rain = RainDistortion(uvInUse*13.0, time)*0.5;
+        rain = RainDistortion(uvInUse*15.0, time)*1.2;
         
         uvInUse.x += sin(uvInUse.y*73.1)*0.002;
         uvInUse.y += sin(uvInUse.x*23.1)*0.005;
@@ -182,10 +183,12 @@ let fragmentshader = `
 
         vec3 colorTint = mix3(colorBot, colorMid, colorTop, vUv.y, 0.5, 0.6 *sin(vUv.x*3.0) , 0.2 * sin(vUv.x*3.0));
         colorTint *= vec3(0.6);
-        color += colorTint;
+        // color += colorTint;
         color += (cameraRay.direction.y );
         
-        gl_FragColor = vec4(color, 1.0);
+        vec4 textureColor = texture2D( texture1, vUv );
+
+        gl_FragColor = textureColor + vec4(color, 1.0);
     }  
 `;
 

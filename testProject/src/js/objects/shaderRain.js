@@ -3,6 +3,8 @@
 
 import * as THREE from 'three';
 import {Raindrops} from '../shaders/raindrops'
+import * as background from '../../../assets/textures/background.jpg'
+
 
 export class shaderRain {
     constructor () {
@@ -20,13 +22,17 @@ export class shaderRain {
             uTime: { type: 'float', value: 0.1 },
             uResolution: { value: new THREE.Vector2(width, height, 1, 1 ) },
             uMouse: { type: 'float', value: 0.1 },
-            uObjectSize: { value: new THREE.Vector2(objectSizeX, objectSizeY, 1, 1 ) }
+            uObjectSize: { value: new THREE.Vector2(objectSizeX, objectSizeY, 1, 1 ) },
+            texture1: { value: new THREE.TextureLoader().load( background) }
         };
 
         this.material =  new THREE.ShaderMaterial({
             uniforms: uniforms,
             vertexShader: raindrops.getVertexshader(),
-            fragmentShader: raindrops.getFragmentshader()
+            fragmentShader: raindrops.getFragmentshader(),
+            blending: THREE.AdditiveBlending,
+            depthTest: false,
+            transparent: true
         });
 
         this.material.side = THREE.DoubleSide;
