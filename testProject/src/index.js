@@ -6,7 +6,7 @@ let SCREEN_WIDTH = window.innerWidth;
 let SCREEN_HEIGHT = window.innerHeight;
 let aspect = SCREEN_WIDTH / SCREEN_HEIGHT;
 
-let exampleDemo;
+let demo;
 
 import * as THREE from 'three';
 import { ExampleDemo } from './Demos/ExampleDemo';
@@ -33,7 +33,7 @@ function init() {
 
 
 
-    exampleDemo = new ExampleDemo(scene);
+    demo = new ExampleDemo(scene);
     //contentManagment.addAllScene(scene);
 
     // add the output of the renderer to the html element
@@ -53,12 +53,12 @@ function animate() {
     const now = getTime();
     const delta = (now - lastUpdate) / FRAME_DURATION;
 
-    for (var item in exampleDemo.scenes) {
-        const sceneItem = exampleDemo.scenes[item];
+    for (var item in demo.scenes) {
+        const sceneItem = demo.scenes[item];
         sceneItem.onSceneAnimation(delta);
     }
 
-    renderer.render(scene, exampleDemo.getCamera());
+    renderer.render(scene, demo.getCamera());
 
     //contentManagment.scenes['scene1'].onSceneAnimation(timer);
     timer += 0.1;
