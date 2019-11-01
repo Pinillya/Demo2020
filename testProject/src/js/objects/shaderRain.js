@@ -3,6 +3,9 @@
 
 import * as THREE from 'three';
 import {Raindrops} from '../shaders/raindrops'
+import {utilities} from '../shaders/utilities'
+import {rainDistortion} from '../shaders/rainDistortion'
+
 import * as background from '../../../assets/textures/background.jpg'
 
 
@@ -26,10 +29,14 @@ export class shaderRain {
             texture1: { value: new THREE.TextureLoader().load( background) }
         };
 
+
+        let fragShader = utilities.concat(rainDistortion);
+        fragShader = fragShader.concat(raindrops.getFragmentshader());
+
         this.material =  new THREE.ShaderMaterial({
             uniforms: uniforms,
             vertexShader: raindrops.getVertexshader(),
-            fragmentShader: raindrops.getFragmentshader(),
+            fragmentShader: fragShader,
             blending: THREE.AdditiveBlending,
             depthTest: false,
             transparent: true
