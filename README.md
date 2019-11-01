@@ -76,6 +76,26 @@ If you want to change the camera, create a camera in your obj, then assign the c
 If you want access to a variables of an object while running the scene in your browser, add that variable to this.variables{}.
 If you want the object to animate, sett this.animate = true; and add onAnimate (step) {}
 
+
+*../objects/codeExampleSphere*
+```
+import * as THREE from 'three';
+export class codeExampleSphere {
+    constructor () {
+        this.geometry = new THREE.SphereGeometry( 5, 32, 32 );
+        this.material = new THREE.MeshNormalMaterial();
+        this.mesh = new THREE.Mesh(this.geometry, this.material);
+        this.animate = true;
+        this.variables = {
+            posX: 1,
+            posY: 1
+        };
+    }
+    onAnimate (step) {
+    }
+}
+```
+
 OBS: The best practice for adding an object and for adding a GLTF scene has not been established yet as we're still experimenting with it.
 
 ---
