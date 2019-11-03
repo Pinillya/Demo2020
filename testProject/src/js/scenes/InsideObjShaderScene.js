@@ -13,7 +13,7 @@ export class InsideObjShaderScene extends BasicScene {
         //let driveHome = new shaderTheDriveHome;
         //this.addObject(driveHome);
 
-        let rain = new shaderRain;
+        let rain = new shaderRain(this.camera);
         this.addObject(rain);
     }
 }

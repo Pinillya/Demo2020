@@ -18,6 +18,7 @@ let fragmentshader = `
     uniform float uTime;
     uniform float uMouse;
     uniform sampler2D texture1;
+    uniform vec3 uCamera;
     
     varying vec2 vUv;
     varying vec3 transformedNormal;
@@ -47,9 +48,9 @@ let fragmentshader = `
         }
        
        // **** Camera **** 
-        vec3 cameraPosition = vec3(0.5, 0.2, 0.0);
-        float zoom = 2.0;
-        vec3 lookat = vec3(0.5, 0.2, 1.0);        
+        vec3 cameraPosition = uCamera; //vec3(0.5, 0.2, 0.0);
+        float zoom = 10.0;
+        vec3 lookat = vec3(0.0, 0.0, 0.0);        
         
         // This is the shader after all standard stuff has been added:
         // **** **** ---- ****
@@ -59,18 +60,29 @@ let fragmentshader = `
         vec3 colorBot = vec3(0.912,0.790,0.524);
         
         
-        //RainDistortion(uvInUse, time, count, fade) 
+        //RainDistortion(uvInUse * size, time, count, fade) 
         vec2 rain = RainDistortion(uvInUse * 7.0, time * 80.0, 1.0);
-        //rain = RainDistortion(uvInUse * 1.0, time * 80.0)*1.2;
-        
+
+        // window distortion        
         uvInUse.x += sin(uvInUse.y*73.1)*0.002;
         uvInUse.y += sin(uvInUse.x*23.1)*0.005;
         
         ray cameraRay = GetRay(cameraPosition, lookat, uvInUse-rain, zoom);
-        color += (cameraRay.direction.y );
         
-        vec4 textureColor = texture2D( texture1, vUv );
+        // Add small highlight
+        //color += (cameraRay.direction.y );
+        
+        // Distort UVs
+        vec2 windowTextureUV = uvInUse+0.5;
+        windowTextureUV.x += (cameraRay.direction.x );
+        windowTextureUV.y += (cameraRay.direction.y );
 
+        vec4 textureColor = texture2D( texture1, windowTextureUV.xy, 0.0);
+        
+        if (windowTextureUV.y > 1.0 || windowTextureUV.y < 0.0) {
+            textureColor *= 0.0;
+        }
+        
         gl_FragColor = textureColor + vec4(color, 1.0);
     }  
 `;

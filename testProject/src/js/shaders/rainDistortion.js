@@ -19,7 +19,6 @@ export let rainDistortion = `
         cellID = getCurrentCellID(rainUV);
         rainUV = fract(rainUV)-0.5;
         
-        
         //Mask1
         float mask1FallTimer = time + fract(sin(cellID.x * 76.4 + cellID.y * 557.0)*760.32) * 6.283; 
         float posY = -sin(mask1FallTimer+sin(mask1FallTimer+sin(mask1FallTimer))*0.5)*0.27;  

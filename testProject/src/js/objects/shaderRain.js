@@ -10,18 +10,23 @@ import * as background from '../../../assets/textures/background.jpg'
 
 
 export class shaderRain {
-    constructor () {
+    constructor (camera) {
         const raindrops = new Raindrops();
 
         const objectSizeX = 40;
         const objectSizeY = 40;
 
-        this.geometry = new THREE.PlaneGeometry( objectSizeX, objectSizeY);
+        this.camera = camera;
+
+        console.log(this.camera)
+
+        this.geometry = new THREE.BoxGeometry( objectSizeX, objectSizeY, 20.0);
 
         const height = window.innerHeight;
         const width = window.innerWidth;
 
         let uniforms = {
+            uCamera : {type: 'vec3', value: this.camera.position},
             uTime: { type: 'float', value: 0.1 },
             uResolution: { value: new THREE.Vector2(width, height, 1, 1 ) },
             uMouse: { type: 'float', value: 0.1 },
@@ -37,9 +42,9 @@ export class shaderRain {
             uniforms: uniforms,
             vertexShader: raindrops.getVertexshader(),
             fragmentShader: fragShader,
-            blending: THREE.AdditiveBlending,
-            depthTest: false,
-            transparent: true
+            //blending: THREE.AdditiveBlending,
+            //depthTest: false,
+            //transparent: true
         });
 
         this.material.side = THREE.DoubleSide;
@@ -67,6 +72,8 @@ export class shaderRain {
             that.mouseX = 0.0;
         });
         this.mouseX = 0.0;
+
+        this.mesh.position.x += 10;
     }
 
     onMouseMove( event ) {
@@ -77,6 +84,16 @@ export class shaderRain {
 
     onAnimate (delta) {
         this.time += 0.01;
+
+        //this.mesh.rotation.y += delta*0.001;
+        //this.mesh.position.x += Math.sin(this.time )*0.3;
+
+
+
+
+        this.camera.position.x = (Math.sin(this.time )*5.0);
+        this.mesh.material.uniforms.uCamera.value = this.camera.position;
+        this.mesh.material.uniforms.uCamera.needsUpdate = true;
 
         //console.log(this.mouseX);
 
