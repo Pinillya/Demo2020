@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "three": "^0.106.2"
+    "three": "^0.137.0"
   },
   "devDependencies": {
     "file-loader": "^4.1.0",
